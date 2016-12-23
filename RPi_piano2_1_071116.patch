@@ -170,7 +170,7 @@ diff -Naur a/sound/soc/bcm/allo-piano-dac-plus.c b/sound/soc/bcm/allo-piano-dac-
 +		unsigned int mode, unsigned int rate, unsigned int lowpass)
 +{
 +	const struct firmware *fw;
-+	char firmware_name[40];
++	char firmware_name[50];
 +	int ret = 0, dac = 0;
 +
 +	if (rate <= 46000)
