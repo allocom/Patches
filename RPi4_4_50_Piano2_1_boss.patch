@@ -1,6 +1,6 @@
 diff -ruN a/arch/arm/boot/dts/overlays/allo-boss-dac-pcm512x-audio-overlay.dts b/arch/arm/boot/dts/overlays/allo-boss-dac-pcm512x-audio-overlay.dts
 --- a/arch/arm/boot/dts/overlays/allo-boss-dac-pcm512x-audio-overlay.dts	1970-01-01 05:30:00.000000000 +0530
-+++ b/arch/arm/boot/dts/overlays/allo-boss-dac-pcm512x-audio-overlay.dts	2017-03-09 09:50:52.091685136 +0530
++++ b/arch/arm/boot/dts/overlays/allo-boss-dac-pcm512x-audio-overlay.dts	2017-03-09 19:35:58.163786167 +0530
 @@ -0,0 +1,59 @@
 +/*
 + * Definitions for Allo Boss DAC board
@@ -63,7 +63,7 @@ diff -ruN a/arch/arm/boot/dts/overlays/allo-boss-dac-pcm512x-audio-overlay.dts b
 +};
 diff -ruN a/arch/arm/boot/dts/overlays/allo-piano-dac-plus-pcm512x-audio-overlay.dts b/arch/arm/boot/dts/overlays/allo-piano-dac-plus-pcm512x-audio-overlay.dts
 --- a/arch/arm/boot/dts/overlays/allo-piano-dac-plus-pcm512x-audio-overlay.dts	1970-01-01 05:30:00.000000000 +0530
-+++ b/arch/arm/boot/dts/overlays/allo-piano-dac-plus-pcm512x-audio-overlay.dts	2017-03-09 10:18:33.463688242 +0530
++++ b/arch/arm/boot/dts/overlays/allo-piano-dac-plus-pcm512x-audio-overlay.dts	2017-03-09 19:35:58.167786167 +0530
 @@ -0,0 +1,53 @@
 +// Definitions for Piano DAC
 +/dts-v1/;
@@ -119,22 +119,21 @@ diff -ruN a/arch/arm/boot/dts/overlays/allo-piano-dac-plus-pcm512x-audio-overlay
 +	};
 +};
 diff -ruN a/arch/arm/boot/dts/overlays/Makefile b/arch/arm/boot/dts/overlays/Makefile
---- a/arch/arm/boot/dts/overlays/Makefile	2017-03-09 09:53:47.471683884 +0530
-+++ b/arch/arm/boot/dts/overlays/Makefile	2017-03-09 10:19:41.251685478 +0530
-@@ -7,7 +7,9 @@
- 	ads1115.dtbo \
- 	ads7846.dtbo \
- 	akkordion-iqdacplus.dtbo \
-+	allo-boss-dac-pcm512x-audio.dtbo \
- 	allo-piano-dac-pcm512x-audio.dtbo \
-+	allo-piano-dac-plus-pcm512x-audio.dtbo \
- 	at86rf233.dtbo \
- 	audioinjector-wm8731-audio.dtbo \
- 	audremap.dtbo \
+--- a/arch/arm/boot/dts/overlays/Makefile	2017-03-09 19:27:40.935784635 +0530
++++ b/arch/arm/boot/dts/overlays/Makefile	2017-03-09 19:35:58.171786167 +0530
+@@ -17,6 +17,8 @@
+ dtbo-$(RPI_DT_OVERLAYS) += ads7846.dtbo
+ dtbo-$(RPI_DT_OVERLAYS) += akkordion-iqdacplus.dtbo
+ dtbo-$(RPI_DT_OVERLAYS) += allo-piano-dac-pcm512x-audio.dtbo
++dtbo-$(RPI_DT_OVERLAYS) += allo-piano-dac-plus-pcm512x-audio.dtbo
++dtbo-$(RPI_DT_OVERLAYS) += allo-boss-dac-pcm512x-audio.dtbo
+ dtbo-$(RPI_DT_OVERLAYS) += at86rf233.dtbo
+ dtbo-$(RPI_DT_OVERLAYS) += audioinjector-wm8731-audio.dtbo
+ dtbo-$(RPI_DT_OVERLAYS) += audremap.dtbo
 diff -ruN a/arch/arm/boot/dts/overlays/README b/arch/arm/boot/dts/overlays/README
---- a/arch/arm/boot/dts/overlays/README	2017-03-09 09:54:19.027682529 +0530
-+++ b/arch/arm/boot/dts/overlays/README	2017-03-09 10:21:06.371689561 +0530
-@@ -263,6 +263,30 @@
+--- a/arch/arm/boot/dts/overlays/README	2017-03-09 19:27:40.935784635 +0530
++++ b/arch/arm/boot/dts/overlays/README	2017-03-09 19:58:02.411789519 +0530
+@@ -235,6 +235,30 @@
                                  that does not result in clipping/distortion!)
  
  
@@ -165,7 +164,7 @@ diff -ruN a/arch/arm/boot/dts/overlays/README b/arch/arm/boot/dts/overlays/READM
  Name:   allo-piano-dac-pcm512x-audio
  Info:   Configures the Allo Piano DAC (2.0/2.1) audio cards.
          (NB. This initial support is for 2.0 channel audio ONLY! ie. stereo.
-@@ -271,6 +295,24 @@
+@@ -243,6 +267,24 @@
  Params: 24db_digital_gain       Allow gain to be applied via the PCM512x codec
                                  Digital volume control.
                                  (The default behaviour is that the Digital
@@ -192,7 +191,7 @@ diff -ruN a/arch/arm/boot/dts/overlays/README b/arch/arm/boot/dts/overlays/READM
                                  gain. For most users, this will be desired
 diff -ruN a/drivers/clk/clk-allo-dac-45Mhz.c b/drivers/clk/clk-allo-dac-45Mhz.c
 --- a/drivers/clk/clk-allo-dac-45Mhz.c	1970-01-01 05:30:00.000000000 +0530
-+++ b/drivers/clk/clk-allo-dac-45Mhz.c	2017-03-09 11:00:30.247694232 +0530
++++ b/drivers/clk/clk-allo-dac-45Mhz.c	2017-03-09 21:27:35.819804506 +0530
 @@ -0,0 +1,161 @@
 +/*
 + * Clock Driver for Allo DAC
@@ -306,7 +305,7 @@ diff -ruN a/drivers/clk/clk-allo-dac-45Mhz.c b/drivers/clk/clk-allo-dac-45Mhz.c
 +
 +	init.name = "clk-allo-dac";
 +	init.ops = &clk_allo_dac_rate_ops;
-+	init.flags = CLK_IS_BASIC;
++	init.flags = CLK_IS_ROOT | CLK_IS_BASIC;
 +	init.parent_names = NULL;
 +	init.num_parents = 0;
 +
@@ -356,20 +355,20 @@ diff -ruN a/drivers/clk/clk-allo-dac-45Mhz.c b/drivers/clk/clk-allo-dac-45Mhz.c
 +MODULE_LICENSE("GPL v2");
 +MODULE_ALIAS("platform:clk-allo-dac");
 diff -ruN a/drivers/clk/Makefile b/drivers/clk/Makefile
---- a/drivers/clk/Makefile	2017-03-09 09:56:32.243683217 +0530
-+++ b/drivers/clk/Makefile	2017-03-09 10:07:06.743690388 +0530
-@@ -17,6 +17,7 @@
- 
- # hardware specific clock types
- # please keep this section sorted lexicographically by file path name
-+obj-$(CONFIG_SND_BCM2708_SOC_ALLO_BOSS_DAC)     += clk-allo-dac-45Mhz.o
- obj-$(CONFIG_MACH_ASM9260)		+= clk-asm9260.o
- obj-$(CONFIG_COMMON_CLK_AXI_CLKGEN)	+= clk-axi-clkgen.o
- obj-$(CONFIG_ARCH_AXXIA)		+= clk-axm5516.o
+--- a/drivers/clk/Makefile	2017-03-09 19:27:40.935784635 +0530
++++ b/drivers/clk/Makefile	2017-03-09 19:35:58.131786167 +0530
+@@ -25,6 +25,7 @@
+ obj-$(CONFIG_ARCH_EFM32)		+= clk-efm32gg.o
+ obj-$(CONFIG_ARCH_HIGHBANK)		+= clk-highbank.o
+ obj-$(CONFIG_SND_BCM2708_SOC_HIFIBERRY_DACPLUS) += clk-hifiberry-dacpro.o
++obj-$(CONFIG_SND_BCM2708_SOC_ALLO_BOSS_DAC) += clk-allo-dac-45Mhz.o
+ obj-$(CONFIG_MACH_LOONGSON32)		+= clk-ls1x.o
+ obj-$(CONFIG_COMMON_CLK_MAX_GEN)	+= clk-max-gen.o
+ obj-$(CONFIG_COMMON_CLK_MAX77686)	+= clk-max77686.o
 diff -ruN a/sound/soc/bcm/allo-boss-dac.c b/sound/soc/bcm/allo-boss-dac.c
 --- a/sound/soc/bcm/allo-boss-dac.c	1970-01-01 05:30:00.000000000 +0530
-+++ b/sound/soc/bcm/allo-boss-dac.c	2017-03-09 11:01:23.671694624 +0530
-@@ -0,0 +1,454 @@
++++ b/sound/soc/bcm/allo-boss-dac.c	2017-03-09 21:34:15.027807231 +0530
+@@ -0,0 +1,449 @@
 +/*
 + * ALSA ASoC Machine Driver for Allo Boss DAC
 + *
@@ -613,7 +612,7 @@ diff -ruN a/sound/soc/bcm/allo-boss-dac.c b/sound/soc/bcm/allo-boss-dac.c
 +static void snd_allo_boss_gpio_unmute(struct snd_soc_card *card)
 +{
 +	if (mute_gpio) {
-+		dev_info(card->dev, "Un-muting DAC using GPIO6\n");
++		dev_info(card->dev, "Un-Muting DAC using GPIO6\n");
 +		gpiod_set_value_cansleep(mute_gpio, 0);
 +	}
 +}
@@ -621,11 +620,7 @@ diff -ruN a/sound/soc/bcm/allo-boss-dac.c b/sound/soc/bcm/allo-boss-dac.c
 +static int snd_allo_boss_set_bias_level(struct snd_soc_card *card,
 +	struct snd_soc_dapm_context *dapm, enum snd_soc_bias_level level)
 +{
-+	struct snd_soc_pcm_runtime *rtd;
-+        struct snd_soc_dai *codec_dai;
-+
-+        rtd = snd_soc_get_pcm_runtime(card, card->dai_link[0].name);
-+        codec_dai = rtd->codec_dai;
++	struct snd_soc_dai *codec_dai = card->rtd[0].codec_dai;
 +
 +	if (dapm->dev != codec_dai->dev)
 +		return 0;
@@ -679,8 +674,7 @@ diff -ruN a/sound/soc/bcm/allo-boss-dac.c b/sound/soc/bcm/allo-boss-dac.c
 +	return ret;
 +}
 +
-+static int snd_allo_boss_startup(
-+	struct snd_pcm_substream *substream)
++static int snd_allo_boss_startup(struct snd_pcm_substream *substream)
 +{
 +	struct snd_soc_pcm_runtime *rtd = substream->private_data;
 +	struct snd_soc_codec *codec = rtd->codec;
@@ -826,8 +820,8 @@ diff -ruN a/sound/soc/bcm/allo-boss-dac.c b/sound/soc/bcm/allo-boss-dac.c
 +MODULE_LICENSE("GPL v2");
 diff -ruN a/sound/soc/bcm/allo-piano-dac-plus.c b/sound/soc/bcm/allo-piano-dac-plus.c
 --- a/sound/soc/bcm/allo-piano-dac-plus.c	1970-01-01 05:30:00.000000000 +0530
-+++ b/sound/soc/bcm/allo-piano-dac-plus.c	2017-03-09 11:01:46.871695274 +0530
-@@ -0,0 +1,668 @@
++++ b/sound/soc/bcm/allo-piano-dac-plus.c	2017-03-09 21:32:11.263807199 +0530
+@@ -0,0 +1,664 @@
 +/*
 + * ALSA ASoC Machine Driver for Allo Piano DAC Plus Subwoofer
 + *
@@ -1234,11 +1228,11 @@ diff -ruN a/sound/soc/bcm/allo-piano-dac-plus.c b/sound/soc/bcm/allo-piano-dac-p
 +static void snd_allo_piano_gpio_unmute(struct snd_soc_card *card)
 +{
 +	if (mute_gpio[0]) {
-+		dev_info(card->dev, "Un-muting DAC using GPIO6\n");
++		dev_info(card->dev, "Un-Muting DAC using GPIO6\n");
 +		gpiod_set_value_cansleep(mute_gpio[0], 0);
 +	}
 +	if (mute_gpio[1]) {
-+		dev_info(card->dev, "Un-muting DAC using GPIO25\n");
++		dev_info(card->dev, "Un-Muting DAC using GPIO25\n");
 +		gpiod_set_value_cansleep(mute_gpio[1], 0);
 +	}
 +}
@@ -1246,11 +1240,7 @@ diff -ruN a/sound/soc/bcm/allo-piano-dac-plus.c b/sound/soc/bcm/allo-piano-dac-p
 +static int snd_allo_piano_set_bias_level(struct snd_soc_card *card,
 +	struct snd_soc_dapm_context *dapm, enum snd_soc_bias_level level)
 +{
-+	struct snd_soc_pcm_runtime *rtd;
-+        struct snd_soc_dai *codec_dai;
-+
-+        rtd = snd_soc_get_pcm_runtime(card, card->dai_link[0].name);
-+        codec_dai = rtd->codec_dai;
++	struct snd_soc_dai *codec_dai = card->rtd[0].codec_dai;
 +
 +	if (dapm->dev != codec_dai->dev)
 +		return 0;
@@ -1497,9 +1487,9 @@ diff -ruN a/sound/soc/bcm/allo-piano-dac-plus.c b/sound/soc/bcm/allo-piano-dac-p
 +MODULE_DESCRIPTION("ALSA ASoC Machine Driver for Allo Piano DAC Plus");
 +MODULE_LICENSE("GPL v2");
 diff -ruN a/sound/soc/bcm/Kconfig b/sound/soc/bcm/Kconfig
---- a/sound/soc/bcm/Kconfig	2017-03-09 09:55:26.019682745 +0530
-+++ b/sound/soc/bcm/Kconfig	2017-03-09 10:17:20.435686706 +0530
-@@ -147,6 +147,20 @@
+--- a/sound/soc/bcm/Kconfig	2017-03-09 19:27:40.935784635 +0530
++++ b/sound/soc/bcm/Kconfig	2017-03-09 19:35:58.119786167 +0530
+@@ -122,6 +122,20 @@
  	help
  	  Say Y or M if you want to add support for Allo Piano DAC.
  
@@ -1517,26 +1507,25 @@ diff -ruN a/sound/soc/bcm/Kconfig b/sound/soc/bcm/Kconfig
 +	 help
 +	   Say Y or M if you want to add support for Allo Boss DAC.
 +
- config SND_BCM2708_SOC_FE_PI_AUDIO
- 	tristate "Support for Fe-Pi-Audio"
+ config SND_PISOUND
+ 	tristate "Support for Blokas Labs pisound"
  	depends on SND_BCM2708_SOC_I2S || SND_BCM2835_SOC_I2S
 diff -ruN a/sound/soc/bcm/Makefile b/sound/soc/bcm/Makefile
---- a/sound/soc/bcm/Makefile	2017-03-09 09:55:18.719682475 +0530
-+++ b/sound/soc/bcm/Makefile	2017-03-09 10:16:27.855688415 +0530
-@@ -27,6 +27,8 @@
+--- a/sound/soc/bcm/Makefile	2017-03-09 19:27:40.935784635 +0530
++++ b/sound/soc/bcm/Makefile	2017-03-09 19:35:58.119786167 +0530
+@@ -20,6 +20,8 @@
+ snd-soc-digidac1-soundcard-objs := digidac1-soundcard.o
  snd-soc-dionaudio-loco-objs := dionaudio_loco.o
- snd-soc-dionaudio-loco-v2-objs := dionaudio_loco-v2.o
  snd-soc-allo-piano-dac-objs := allo-piano-dac.o
 +snd-soc-allo-piano-dac-plus-objs := allo-piano-dac-plus.o
 +snd-soc-allo-boss-dac-objs := allo-boss-dac.o
  snd-soc-pisound-objs := pisound.o
- snd-soc-fe-pi-audio-objs := fe-pi-audio.o
  
-@@ -48,5 +50,7 @@
+ obj-$(CONFIG_SND_BCM2708_SOC_ADAU1977_ADC) += snd-soc-adau1977-adc.o
+@@ -38,4 +40,6 @@
+ obj-$(CONFIG_SND_DIGIDAC1_SOUNDCARD) += snd-soc-digidac1-soundcard.o
  obj-$(CONFIG_SND_BCM2708_SOC_DIONAUDIO_LOCO) += snd-soc-dionaudio-loco.o
- obj-$(CONFIG_SND_BCM2708_SOC_DIONAUDIO_LOCO_V2) += snd-soc-dionaudio-loco-v2.o
  obj-$(CONFIG_SND_BCM2708_SOC_ALLO_PIANO_DAC) += snd-soc-allo-piano-dac.o
 +obj-$(CONFIG_SND_BCM2708_SOC_ALLO_PIANO_DAC_PLUS) += snd-soc-allo-piano-dac-plus.o
 +obj-$(CONFIG_SND_BCM2708_SOC_ALLO_BOSS_DAC) += snd-soc-allo-boss-dac.o
  obj-$(CONFIG_SND_PISOUND) += snd-soc-pisound.o
- obj-$(CONFIG_SND_BCM2708_SOC_FE_PI_AUDIO) += snd-soc-fe-pi-audio.o
