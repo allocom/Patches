@@ -192,7 +192,7 @@ diff -ruN a/arch/arm/boot/dts/overlays/README b/arch/arm/boot/dts/overlays/READM
                                  gain. For most users, this will be desired
 diff -ruN a/drivers/clk/clk-allo-dac-45Mhz.c b/drivers/clk/clk-allo-dac-45Mhz.c
 --- a/drivers/clk/clk-allo-dac-45Mhz.c	1970-01-01 05:30:00.000000000 +0530
-+++ b/drivers/clk/clk-allo-dac-45Mhz.c	2017-02-09 19:45:08.485335296 +0530
++++ b/drivers/clk/clk-allo-dac-45Mhz.c	2017-03-09 11:00:30.247694232 +0530
 @@ -0,0 +1,161 @@
 +/*
 + * Clock Driver for Allo DAC
@@ -306,7 +306,7 @@ diff -ruN a/drivers/clk/clk-allo-dac-45Mhz.c b/drivers/clk/clk-allo-dac-45Mhz.c
 +
 +	init.name = "clk-allo-dac";
 +	init.ops = &clk_allo_dac_rate_ops;
-+	init.flags = CLK_IS_ROOT | CLK_IS_BASIC;
++	init.flags = CLK_IS_BASIC;
 +	init.parent_names = NULL;
 +	init.num_parents = 0;
 +
@@ -368,8 +368,8 @@ diff -ruN a/drivers/clk/Makefile b/drivers/clk/Makefile
  obj-$(CONFIG_ARCH_AXXIA)		+= clk-axm5516.o
 diff -ruN a/sound/soc/bcm/allo-boss-dac.c b/sound/soc/bcm/allo-boss-dac.c
 --- a/sound/soc/bcm/allo-boss-dac.c	1970-01-01 05:30:00.000000000 +0530
-+++ b/sound/soc/bcm/allo-boss-dac.c	2017-03-09 09:48:55.499679795 +0530
-@@ -0,0 +1,450 @@
++++ b/sound/soc/bcm/allo-boss-dac.c	2017-03-09 11:01:23.671694624 +0530
+@@ -0,0 +1,454 @@
 +/*
 + * ALSA ASoC Machine Driver for Allo Boss DAC
 + *
@@ -621,7 +621,11 @@ diff -ruN a/sound/soc/bcm/allo-boss-dac.c b/sound/soc/bcm/allo-boss-dac.c
 +static int snd_allo_boss_set_bias_level(struct snd_soc_card *card,
 +	struct snd_soc_dapm_context *dapm, enum snd_soc_bias_level level)
 +{
-+	struct snd_soc_dai *codec_dai = card->rtd[0].codec_dai;
++	struct snd_soc_pcm_runtime *rtd;
++        struct snd_soc_dai *codec_dai;
++
++        rtd = snd_soc_get_pcm_runtime(card, card->dai_link[0].name);
++        codec_dai = rtd->codec_dai;
 +
 +	if (dapm->dev != codec_dai->dev)
 +		return 0;
@@ -822,8 +826,8 @@ diff -ruN a/sound/soc/bcm/allo-boss-dac.c b/sound/soc/bcm/allo-boss-dac.c
 +MODULE_LICENSE("GPL v2");
 diff -ruN a/sound/soc/bcm/allo-piano-dac-plus.c b/sound/soc/bcm/allo-piano-dac-plus.c
 --- a/sound/soc/bcm/allo-piano-dac-plus.c	1970-01-01 05:30:00.000000000 +0530
-+++ b/sound/soc/bcm/allo-piano-dac-plus.c	2017-03-09 10:14:54.019688283 +0530
-@@ -0,0 +1,664 @@
++++ b/sound/soc/bcm/allo-piano-dac-plus.c	2017-03-09 11:01:46.871695274 +0530
+@@ -0,0 +1,668 @@
 +/*
 + * ALSA ASoC Machine Driver for Allo Piano DAC Plus Subwoofer
 + *
@@ -1242,7 +1246,11 @@ diff -ruN a/sound/soc/bcm/allo-piano-dac-plus.c b/sound/soc/bcm/allo-piano-dac-p
 +static int snd_allo_piano_set_bias_level(struct snd_soc_card *card,
 +	struct snd_soc_dapm_context *dapm, enum snd_soc_bias_level level)
 +{
-+	struct snd_soc_dai *codec_dai = card->rtd[0].codec_dai;
++	struct snd_soc_pcm_runtime *rtd;
++        struct snd_soc_dai *codec_dai;
++
++        rtd = snd_soc_get_pcm_runtime(card, card->dai_link[0].name);
++        codec_dai = rtd->codec_dai;
 +
 +	if (dapm->dev != codec_dai->dev)
 +		return 0;
