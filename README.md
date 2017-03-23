@@ -9,3 +9,6 @@ Driver patch file for Allo Boss DAC on RPi linux 4.4.23 (RPi_boss.patch)
 
 Driver patch file for Allo Piano 2.1 DAC & Allo Boss DAC for RPi linux 4.4.50 (RPi4_4_50_Piano2_1_boss.patch)
 * 09/03/2017	Added initial patch file
+
+Driver patch file for Allo Piano 2.1 DAC & Allo Boss DAC for RPi linux 4.9.16 (RPi4_9_16_Piano2_1_boss.patch)
+* 23/03/2017	Added initial patch file
